@@ -130,13 +130,25 @@ async function toggleFavorite() {
     // get story id associated with the icon
     const storyId = $(this).parent().attr("id");
 
+    console.debug("toggleFavorite");
+    console.debug($(this));
+    console.debug($(this).parent().attr("id"));
+
     if (storyIsFavorite(storyId)) {
-        // if story is one of user's favorites, remove favorite and empty star icon
+        // if story is one of user's favorites:
+        // remove favorite via API
         await currentUser.removeFavorite(storyId);
 
-        console.log($(this).children("i"));
+        // empty star icon
+        // console.log($(this).children("i"));
+        $(this).children("i").first().addClass("far").removeClass("fas");
     } else {
-        // else if story isn't one of user's favorites, add favorite and fill star icon
-        await currentUser.addFavorite(storyId);
+        // else if story isn't one of user's favorites,
+        // add favorite via API
+        await currentUser.addFavorite(storyId, storyList);
+
+        // fill star icon
+        // console.log($(this).children("i"));
+        $(this).children("i").first().addClass("fas").removeClass("far");
     }
 }

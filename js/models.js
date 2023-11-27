@@ -217,18 +217,27 @@ class User {
         });
 
         console.log(response.data.message);
+
+        // Add to this user's favorites list property
+        const storyToAdd = storyList.stories.find((story) => story.storyId === storyId);
+        this.favorites.push(storyToAdd);
     }
 
-    // STUCK HERE: removeFavorite returing 401 unauthorized when running with axios
     async removeFavorite(storyId) {
         const token = this.loginToken;
         const username = this.username;
+        const idToRemove = storyId;
 
         // Call API to add story to user's favorites
         const response = await axios.delete(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
-            token,
+            data: {
+                token,
+            },
         });
 
         console.log(response.data.message);
+
+        // Remove from this user's favorites list property
+        this.favorites = this.favorites.filter((story) => story.storyId !== idToRemove);
     }
 }
