@@ -3,9 +3,11 @@
 body {
     font-family: Arimo, sans-serif;
     margin: 8px 7.5vw;
-    background: #bbcfff;
+    height: 100vh;
+    background: radial-gradient(#ffa9a9, #a3c8ff);
 }
-x h1 {
+
+h1 {
     font-size: 1.1rem;
     margin: 0;
 }
