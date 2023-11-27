@@ -45,3 +45,12 @@
     font-size: 0.85rem;
     margin-bottom: 10px;
 }
+
+.star:hover {
+    cursor: pointer;
+}
+
+.trash:hover {
+    cursor: pointer;
+    color: red;
+}

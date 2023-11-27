@@ -1,5 +1,22 @@
 "use strict";
 
+/** TODO:
+ * Add ability to hide "submit" form (maybe add a 'cancel' button to the form page)
+ * Fix idendentation issue when logged out / when extra icons added (add classes for user state / page being viewed)
+ *
+ * Add sign up error handling
+ *
+ * Add 'edit story' functionality:
+ *   - on "My Stories", add pencil icons
+ *   - clicking replaces story list with form showing current story information
+ *   - submitting form: sends update to API, updates currentUser's stories, hides form and shows story list
+ *
+ *  Add 'edit user' functionality:
+ *   - add "account" link next to logout link
+ *   - clicking replaces story list with form showing current user information
+ *   - submitting form: sends update to API / error handling / success message / updates currentUser / updates form values
+ */
+
 // So we don't have to keep re-finding things on page, find DOM elements once:
 
 const $body = $("body");
