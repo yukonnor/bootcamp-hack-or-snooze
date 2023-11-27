@@ -35,6 +35,8 @@ function updateNavOnLogin() {
     $navUserProfile.text(`${currentUser.username}`).show();
 }
 
+/** When user clicks the Submit nav link, the submit story form should appear */
+
 function showSubmitStoryForm() {
     // TODO: hide submit form if already showing?
     console.debug("showSubmitForm");
@@ -42,3 +44,11 @@ function showSubmitStoryForm() {
 }
 
 $navSubmit.on("click", showSubmitStoryForm);
+
+/** When a users click the Favorites nav link, the story list container should only show favortied stories */
+function navFavoritesClick(evt) {
+    console.debug("navFavoritesClick", evt);
+    putFavoriteStoriesOnPage();
+}
+
+$navFavorites.on("click", navFavoritesClick);

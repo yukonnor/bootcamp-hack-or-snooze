@@ -206,4 +206,29 @@ class User {
             return null;
         }
     }
+
+    async addFavorite(storyId) {
+        const token = this.loginToken;
+        const username = this.username;
+
+        // Call API to add story to user's favorites
+        const response = await axios.post(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
+            token,
+        });
+
+        console.log(response.data.message);
+    }
+
+    // STUCK HERE: removeFavorite returing 401 unauthorized when running with axios
+    async removeFavorite(storyId) {
+        const token = this.loginToken;
+        const username = this.username;
+
+        // Call API to add story to user's favorites
+        const response = await axios.delete(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
+            token,
+        });
+
+        console.log(response.data.message);
+    }
 }
