@@ -47,9 +47,19 @@ function showSubmitStoryForm() {
 $navSubmit.on("click", showSubmitStoryForm);
 
 /** When a users click the Favorites nav link, the story list container should only show favortied stories */
+
 function navFavoritesClick(evt) {
     console.debug("navFavoritesClick", evt);
     putFavoriteStoriesOnPage();
 }
 
 $navFavorites.on("click", navFavoritesClick);
+
+/** When a users click the My Stories nav link, the story list container should only show their stories */
+
+function navMyStoriesClick(evt) {
+    console.debug("navMyStoriesClick", evt);
+    putUserStoriesOnPage();
+}
+
+$navMyStories.on("click", navMyStoriesClick);

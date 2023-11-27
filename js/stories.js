@@ -78,7 +78,11 @@ async function addStoryFromForm(event) {
     const title = $("#create-title").val();
     const url = $("#create-url").val();
 
+    // Add story via API
     let newStory = await storyList.addStory(currentUser, { title, author, url });
+
+    // Add story to current user's ownStories property
+    currentUser.ownStories.push(newStory);
 
     putStoriesOnPage();
 }
@@ -103,11 +107,17 @@ function generateFavoriteMarkup() {
             iconType = "fas";
         }
 
-        $story.prepend(`<span class="star"><i class="fa-star ${iconType}"></i></span>`);
-    }
+        // create star icon and star span
+        const starIcon = $("<i>").addClass(`fa-star ${iconType}`);
+        const starSpan = $("<span>").addClass("star");
 
-    // add click listener for the favorite icons:
-    $allStoriesList.on("click", ".star", toggleFavorite);
+        // add click listener for the star icon:
+        starIcon.on("click", toggleFavorite);
+
+        // add star icon to star span, and prepend span to story li
+        starSpan.append(starIcon);
+        $story.prepend(starSpan);
+    }
 }
 
 /** Return whether a story is in the user's favorites */
@@ -127,12 +137,12 @@ function storyIsFavorite(storyID) {
 /** Toggle whether a story is a user's favortie on favorite icon click */
 
 async function toggleFavorite() {
-    // get story id associated with the icon
-    const storyId = $(this).parent().attr("id");
-
     console.debug("toggleFavorite");
-    console.debug($(this));
-    console.debug($(this).parent().attr("id"));
+    // get story id associated with the icon
+    const storyId = $(this).parent().parent().attr("id");
+
+    // console.debug($(this));
+    // console.debug($(this).parent().parent().attr("id"));
 
     if (storyIsFavorite(storyId)) {
         // if story is one of user's favorites:
@@ -140,15 +150,70 @@ async function toggleFavorite() {
         await currentUser.removeFavorite(storyId);
 
         // empty star icon
-        // console.log($(this).children("i"));
-        $(this).children("i").first().addClass("far").removeClass("fas");
+        $(this).addClass("far").removeClass("fas");
     } else {
         // else if story isn't one of user's favorites,
         // add favorite via API
         await currentUser.addFavorite(storyId, storyList);
 
         // fill star icon
-        // console.log($(this).children("i"));
-        $(this).children("i").first().addClass("fas").removeClass("far");
+        $(this).addClass("fas").removeClass("far");
     }
+}
+
+/** This function adds 'trash' icons to the stories list on the 'my stories' view so that user can delete their stories */
+
+function generateDeleteMarkup() {
+    console.debug("generateDeleteMarkup");
+
+    // loop through all of the user's stories and generate 'trash' icons
+    for (let story of $allStoriesList.children()) {
+        const $story = $(story);
+
+        // create trash icon and span
+        const trashIcon = $("<i>").addClass("fa-trash-alt fas");
+        const trashSpan = $("<span>").addClass("trash");
+
+        // add click listener for the trash icon:
+        trashIcon.on("click", deleteStory);
+
+        // add trash icon to span, and prepend span to story li
+        trashSpan.append(trashIcon);
+        $story.prepend(trashSpan);
+    }
+}
+
+/** This function runs when a 'trash' icon is clicked to call the deleteStory method*/
+
+async function deleteStory() {
+    // get story id associated with the icon
+    const storyId = $(this).parent().parent().attr("id");
+
+    console.debug("deleteStory");
+    console.debug($(this));
+    console.debug($(this).parent().attr("id"));
+
+    // delete story via API & remove from user's stories list
+    await currentUser.deleteStory(storyId);
+
+    // refresh the story list so that stories are removed if user navigates to all stories.
+    storyList = await StoryList.getStories();
+
+    // refresh the stories list HTML:
+    putUserStoriesOnPage();
+}
+
+function putUserStoriesOnPage() {
+    console.debug("putUserStoriesOnPage");
+
+    $allStoriesList.empty();
+
+    // loop through all of the user's stories and generate HTML for them
+    for (let story of currentUser.ownStories) {
+        const $story = generateStoryMarkup(story);
+        $allStoriesList.append($story);
+    }
+
+    generateDeleteMarkup();
+    $allStoriesList.show();
 }

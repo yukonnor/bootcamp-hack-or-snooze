@@ -212,11 +212,24 @@ class User {
         const username = this.username;
 
         // Call API to add story to user's favorites
-        const response = await axios.post(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
-            token,
-        });
-
-        console.log(response.data.message);
+        const response = await axios
+            .post(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
+                token,
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // Server responded with a status code that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // No response was received
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log("Error", error.message);
+                }
+            });
 
         // Add to this user's favorites list property
         const storyToAdd = storyList.stories.find((story) => story.storyId === storyId);
@@ -229,7 +242,39 @@ class User {
         const idToRemove = storyId;
 
         // Call API to add story to user's favorites
-        const response = await axios.delete(`${BASE_URL}/users/${username}/favorites/${storyId}`, {
+        const response = await axios
+            .delete(`${BASE_URL}/users/${username}/favorites/${idToRemove}`, {
+                data: {
+                    token,
+                },
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // Server responded with a status code that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // No response was received
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log("Error", error.message);
+                }
+            });
+
+        // Remove from this user's favorites list property
+        this.favorites = this.favorites.filter((story) => story.storyId !== idToRemove);
+    }
+
+    async deleteStory(storyId) {
+        console.debug("deleteStory Method");
+
+        const token = this.loginToken;
+        const idToRemove = storyId;
+
+        // Call API to delete one of user's stories
+        const response = await axios.delete(`${BASE_URL}/stories/${idToRemove}`, {
             data: {
                 token,
             },
@@ -237,7 +282,7 @@ class User {
 
         console.log(response.data.message);
 
-        // Remove from this user's favorites list property
-        this.favorites = this.favorites.filter((story) => story.storyId !== idToRemove);
+        // Remove from this user's ownStories property
+        this.ownStories = this.ownStories.filter((story) => story.storyId !== idToRemove);
     }
 }
