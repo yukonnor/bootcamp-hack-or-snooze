@@ -116,8 +116,8 @@ function updateUIOnUserLogin() {
     console.debug("updateUIOnUserLogin");
 
     $allStoriesList.show();
+    addFavoriteIcons($allStoriesList);
+    $allStoriesList.removeClass("logged-out");
 
     updateNavOnLogin();
-
-    generateFavoriteMarkup();
 }

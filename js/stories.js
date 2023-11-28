@@ -20,9 +20,10 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-    // console.debug("generateStoryMarkup", story);
+    console.debug("generateStoryMarkup");
 
     const hostName = story.getHostName();
+
     return $(`
       <li id="${story.storyId}">
         <a href="${story.url}" target="a_blank" class="story-link">
@@ -48,6 +49,13 @@ function putStoriesOnPage() {
         $allStoriesList.append($story);
     }
 
+    if (currentUser) {
+        $allStoriesList.removeClass("logged-out");
+        // addFavoriteIcons($allStoriesList);
+    } else {
+        $allStoriesList.addClass("logged-out");
+    }
+
     $allStoriesList.show();
 }
 
@@ -56,16 +64,15 @@ function putStoriesOnPage() {
 function putFavoriteStoriesOnPage() {
     console.debug("putFavoriteStoriesOnPage");
 
-    $allStoriesList.empty();
+    $favoritStoriesList.empty();
 
     // loop through all of the user's favortie stories and generate HTML for them
     for (let story of currentUser.favorites) {
         const $story = generateStoryMarkup(story);
-        $allStoriesList.append($story);
+        $favoritStoriesList.append($story);
     }
 
-    generateFavoriteMarkup();
-    $allStoriesList.show();
+    addFavoriteIcons($favoritStoriesList);
 }
 
 /** This function gets the data from the form, calls the .addStory method, and
@@ -90,12 +97,12 @@ async function addStoryFromForm(event) {
 $submitForm.on("submit", addStoryFromForm);
 
 /* This function adds 'star' icons to the stories list so that user can favorite/unfavorite stories */
-function generateFavoriteMarkup() {
-    console.debug("generateFavoriteMarkup");
+function addFavoriteIcons(storyList) {
+    console.debug("addFavoriteIcons");
 
     // loop through all of our stories and generate 'star' icons for the favorites
 
-    for (let story of $allStoriesList.children()) {
+    for (let story of storyList.children()) {
         const $story = $(story);
 
         // far = empty/not favorited | fas = full/favorited
@@ -163,15 +170,15 @@ async function toggleFavorite() {
 
 /** This function adds 'trash' icons to the stories list on the 'my stories' view so that user can delete their stories */
 
-function generateDeleteMarkup() {
-    console.debug("generateDeleteMarkup");
+function addTrashIcons() {
+    console.debug("addTrashIcons");
 
     // loop through all of the user's stories and generate 'trash' icons
-    for (let story of $allStoriesList.children()) {
+    for (let story of $myStoriesList.children()) {
         const $story = $(story);
 
         // create trash icon and span
-        const trashIcon = $("<i>").addClass("fa-trash-alt fas");
+        const trashIcon = $("<i>").addClass("fas fa-trash-alt");
         const trashSpan = $("<span>").addClass("trash");
 
         // add click listener for the trash icon:
@@ -203,17 +210,74 @@ async function deleteStory() {
     putUserStoriesOnPage();
 }
 
+/** This function adds 'penci' icons to the stories list on the 'my stories' view so that user can edit their stories */
+
+function addPencilIcons() {
+    console.debug("addPencilIcons");
+
+    // loop through all of the user's stories and generate 'trash' icons
+    for (let story of $myStoriesList.children()) {
+        const $story = $(story);
+
+        // create pencil icon and span
+        const pencilIcon = $("<i>").addClass("fas fa-pencil");
+        const pencilSpan = $("<span>").addClass("pencil");
+
+        // add click listener for the pencil icon:
+        pencilIcon.on("click", editStory);
+
+        // add pencil icon to span, and prepend span to story li
+        pencilSpan.append(pencilIcon);
+        $story.prepend(pencilSpan);
+    }
+}
+
+/** This function runs when a 'trash' icon is clicked to call the deleteStory method*/
+
+async function editStory() {
+    console.debug("editStory");
+
+    // get story id associated with the icon
+    const idToEdit = $(this).parent().parent().attr("id");
+
+    const storyToEdit = currentUser.ownStories.find((story) => story.storyId === idToEdit);
+    console.log(storyToEdit);
+
+    // get story's author, title and url
+    const author = storyToEdit.author;
+    const title = storyToEdit.title;
+    const url = storyToEdit.url;
+
+    $editForm.show();
+
+    $("#edit-author").val(author);
+    $("#edit-title").val(title);
+    $("#edit-url").val(url);
+
+    // delete story via API & remove from user's stories list
+    await currentUser.deleteStory(storyId);
+
+    // refresh the story list so that stories are removed if user navigates to all stories.
+    storyList = await StoryList.getStories();
+
+    // refresh the stories list HTML:
+    putUserStoriesOnPage();
+}
+
+/** Put the User's stories in the $myStoriesList OL */
+
 function putUserStoriesOnPage() {
     console.debug("putUserStoriesOnPage");
 
-    $allStoriesList.empty();
+    $myStoriesList.empty();
 
     // loop through all of the user's stories and generate HTML for them
     for (let story of currentUser.ownStories) {
+        console.log(story);
         const $story = generateStoryMarkup(story);
-        $allStoriesList.append($story);
+        $myStoriesList.append($story);
     }
 
-    generateDeleteMarkup();
-    $allStoriesList.show();
+    addTrashIcons();
+    addPencilIcons();
 }

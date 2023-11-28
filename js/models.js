@@ -325,4 +325,41 @@ class User {
         // Remove from this user's ownStories property
         this.ownStories = this.ownStories.filter((story) => story.storyId !== idToRemove);
     }
+
+    async editStory(storyId, storyData) {
+        // storyData is an object of {author, title, url}
+        console.debug("editStory Method");
+
+        const token = this.loginToken;
+        const idToEdit = storyId;
+
+        // Call API to delete one of user's stories
+        const response = await axios.patch(`${BASE_URL}/stories/${idToEdit}`, {
+            data: {
+                token,
+                story: storyData,
+            },
+        });
+
+        console.log(response.data);
+
+        // STOPPED HERE. TRYING TO EDIT THE STORY IN THE USER OBJECT. CAN POSSIBLY REMOVE OLD AND ADD NEW.
+        // AS RESPONSE RETURNS THE STORY OBJECT
+        // JUST NEED TO TEST THIS
+
+        // create a new story instance for the edited story
+        const newStoryInstance = new Story({
+            storyId: response.data.story.storyId,
+            title: response.data.story.title,
+            author: response.data.story.author,
+            url: response.data.story.url,
+            username: response.data.story.username,
+            createdAt: response.data.story.createdAt,
+        });
+
+        // Replace story with edited version in user's ownStories property
+        this.ownStories = this.ownStories.filter((story) => story.storyId !== idToEdit);
+        const storyToAdd = storyList.stories.find((story) => story.storyId === storyId);
+        this.ownStories.push(newStoryInstance);
+    }
 }

@@ -18,12 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Hack or Snooze</title>
-        <link
-            rel="stylesheet"
-            href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-            integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-            crossorigin="anonymous"
-        />
+        <script src="https://kit.fontawesome.com/ea57d4f1d6.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/site.css" />
         <link rel="stylesheet" href="css/user.css" />
         <link rel="stylesheet" href="css/stories.css" />
@@ -71,11 +66,31 @@
                 <hr />
             </form>
 
+            <!-- edit story form -->
+            <form action="" class="hidden" id="edit-form" style="display: none">
+                <div>
+                    <label for="edit-author">author</label>
+                    <input id="edit-author" required="" placeholder="author name" />
+                </div>
+                <div>
+                    <label for="edit-title">title</label>
+                    <input id="edit-title" required="" placeholder="story title" />
+                </div>
+                <div>
+                    <label for="edit-url">url</label>
+                    <input id="edit-url" required="" type="url" placeholder="story url" />
+                </div>
+                <button type="submit">submit</button>
+                <hr />
+            </form>
+
             <!-- loading message (removed by JS after stories loaded) -->
             <div id="stories-loading-msg">Loading&hellip;</div>
 
-            <!-- List of all stories -->
+            <!-- Lists of all stories -->
             <ol id="all-stories-list" class="stories-list"></ol>
+            <ol id="favorite-stories-list" class="stories-list"></ol>
+            <ol id="my-stories-list" class="stories-list"></ol>
         </section>
 
         <!-- Login and signup forms -->
