@@ -46,6 +46,15 @@ function showSubmitStoryForm() {
 
 $navSubmit.on("click", showSubmitStoryForm);
 
+/** When user clicks the "Cancel" button on the story form, the form should disappear */
+function hideSubmitStoryForm() {
+    // TODO: hide submit form if already showing?
+    console.debug("hideSubmitStoryForm");
+    $submitForm.hide();
+}
+
+$cancelButton.on("click", hideSubmitStoryForm);
+
 /** When a users click the Favorites nav link, the story list container should only show favortied stories */
 
 function navFavoritesClick(evt) {
