@@ -1,10 +1,7 @@
 "use strict";
 
 /** TODO:
- * Add ability to hide "submit" form (maybe add a 'cancel' button to the form page)
  * Fix idendentation issue when logged out / when extra icons added (add classes for user state / page being viewed)
- *
- * Add sign up error handling
  *
  * Add 'edit story' functionality:
  *   - on "My Stories", add pencil icons
@@ -27,7 +24,6 @@ const $allStoriesList = $("#all-stories-list");
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
 const $submitForm = $("#submit-form");
-const $cancelButton = $("#cancel-btn");
 
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
@@ -42,7 +38,7 @@ const $navMyStories = $("#nav-my-stories");
  */
 
 function hidePageComponents() {
-    const components = [$allStoriesList, $loginForm, $signupForm];
+    const components = [$allStoriesList, $loginForm, $signupForm, $submitForm];
     components.forEach((c) => c.hide());
 }
 

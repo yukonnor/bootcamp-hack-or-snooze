@@ -68,7 +68,6 @@
                     <input id="create-url" required="" type="url" placeholder="story url" />
                 </div>
                 <button type="submit">submit</button>
-                <button type="button" id="cancel-btn">cancel</button>
                 <hr />
             </form>
 
@@ -101,15 +100,20 @@
                 <h4>Create Account</h4>
                 <div class="login-input">
                     <label for="signup-name">name</label>
-                    <input id="signup-name" autocapitalize="words" />
+                    <input id="signup-name" autocapitalize="words" required />
                 </div>
                 <div class="login-input">
                     <label for="signup-username">username</label>
-                    <input id="signup-username" autocomplete="new-username" />
+                    <input id="signup-username" autocomplete="new-username" required />
                 </div>
                 <div class="login-input">
                     <label for="signup-password">password</label>
-                    <input id="signup-password" autocomplete="new-password" type="password" />
+                    <input
+                        id="signup-password"
+                        autocomplete="new-password"
+                        type="password"
+                        required
+                    />
                 </div>
                 <button type="submit">create account</button>
             </form>

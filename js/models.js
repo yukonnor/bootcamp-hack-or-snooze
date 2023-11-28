@@ -130,11 +130,32 @@ class User {
      */
 
     static async signup(username, password, name) {
-        const response = await axios({
-            url: `${BASE_URL}/signup`,
-            method: "POST",
-            data: { user: { username, password, name } },
-        });
+        let response = {};
+
+        try {
+            response = await axios({
+                url: `${BASE_URL}/signup`,
+                method: "POST",
+                data: { user: { username, password, name } },
+            });
+        } catch (error) {
+            if (error.response) {
+                // Server responded with a status code that falls out of the range of 2xx
+                console.debug(error.response.data);
+                console.debug(error.response.status);
+                console.debug(error.response.headers);
+                alert(`Unable to sign up: ${error.response.data.error.message}`);
+            } else if (error.request) {
+                // No response was received
+                console.debug(error.request);
+                alert("Something went wrong. Please try again later.");
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.debug("Error", error.message);
+                alert("Something went wrong. Please try again later.");
+            }
+            return null;
+        }
 
         let { user } = response.data;
 
@@ -157,11 +178,30 @@ class User {
    */
 
     static async login(username, password) {
-        const response = await axios({
-            url: `${BASE_URL}/login`,
-            method: "POST",
-            data: { user: { username, password } },
-        });
+        let response = {};
+
+        try {
+            response = await axios.post(`${BASE_URL}/login`, {
+                user: { username, password },
+            });
+        } catch (error) {
+            if (error.response) {
+                // Server responded with a status code that falls out of the range of 2xx
+                console.debug(error.response.data);
+                console.debug(error.response.status);
+                console.debug(error.response.headers);
+                alert(`Unable to login: ${error.response.data.error.message}`);
+            } else if (error.request) {
+                // No response was received
+                console.debug(error.request);
+                alert("Something went wrong. Please try again later.");
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.debug("Error", error.message);
+                alert("Something went wrong. Please try again later.");
+            }
+            return null;
+        }
 
         let { user } = response.data;
 
