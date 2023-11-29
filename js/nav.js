@@ -6,11 +6,15 @@
 
 /** Show main list of all stories when click site name */
 
-function navAllStories(evt) {
+async function navAllStories(evt) {
     console.debug("navAllStories", evt);
     hidePageComponents();
-    putStoriesOnPage();
-    addFavoriteIcons();
+
+    // refetch stories from API to get newly posted stories since session started
+    await getAndShowStoriesOnStart();
+
+    console.log("Add Favorite Icons:");
+    addFavoriteIcons($allStoriesList);
 }
 
 $body.on("click", "#nav-all", navAllStories);

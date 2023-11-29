@@ -224,7 +224,7 @@ function addPencilIcons() {
         const pencilSpan = $("<span>").addClass("pencil");
 
         // add click listener for the pencil icon:
-        pencilIcon.on("click", editStory);
+        pencilIcon.on("click", showEditStoryForm);
 
         // add pencil icon to span, and prepend span to story li
         pencilSpan.append(pencilIcon);
@@ -232,14 +232,16 @@ function addPencilIcons() {
     }
 }
 
-/** This function runs when a 'trash' icon is clicked to call the deleteStory method*/
+/** This function runs when a 'pencil' icon is clicked to show and populate the edit story form */
+// Q: Best file for this function?
 
-async function editStory() {
-    console.debug("editStory");
+function showEditStoryForm() {
+    console.debug("showEditStoryForm");
 
     // get story id associated with the icon
     const idToEdit = $(this).parent().parent().attr("id");
 
+    // get the story object given the id
     const storyToEdit = currentUser.ownStories.find((story) => story.storyId === idToEdit);
     console.log(storyToEdit);
 
@@ -248,21 +250,38 @@ async function editStory() {
     const title = storyToEdit.title;
     const url = storyToEdit.url;
 
+    // show the edit form and asssign populate with the current values from the story
     $editForm.show();
 
     $("#edit-author").val(author);
     $("#edit-title").val(title);
     $("#edit-url").val(url);
 
-    // delete story via API & remove from user's stories list
-    await currentUser.deleteStory(storyId);
+    // add story id to edit form
+    $editForm.attr("id", idToEdit);
+}
 
-    // refresh the story list so that stories are removed if user navigates to all stories.
-    storyList = await StoryList.getStories();
+/** Run editStory when the edit story form is submitted*/
 
-    // refresh the stories list HTML:
+async function editStory(event) {
+    event.preventDefault();
+
+    const author = $("#edit-author").val();
+    const title = $("#edit-title").val();
+    const url = $("#edit-url").val();
+    const storyId = $(this).attr("id");
+
+    // Edit story via API
+    let newStory = await currentUser.editStory(storyId, { title, author, url });
+
+    // Add story to current user's ownStories property
+    currentUser.ownStories.push(newStory);
+
+    $editForm.hide();
     putUserStoriesOnPage();
 }
+
+$editForm.on("submit", editStory);
 
 /** Put the User's stories in the $myStoriesList OL */
 

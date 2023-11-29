@@ -54,6 +54,14 @@
     margin-left: 0;
 }
 
+#my-stories-list .story-author {
+    margin-left: 2.5em;
+}
+
+#my-stories-list .story-user {
+    margin-left: 2.5em;
+}
+
 .star:hover {
     cursor: pointer;
 }
@@ -61,4 +69,13 @@
 .trash:hover {
     cursor: pointer;
     color: red;
+}
+
+.pencil {
+    margin-right: 5px;
+}
+
+.pencil:hover {
+    cursor: pointer;
+    color: rgb(255, 174, 0);
 }
