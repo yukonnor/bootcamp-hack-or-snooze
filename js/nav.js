@@ -6,8 +6,8 @@
 
 /** Show main list of all stories when click site name */
 
-async function navAllStories(evt) {
-    console.debug("navAllStories", evt);
+async function navAllStories() {
+    console.debug("navAllStories");
     hidePageComponents();
 
     // refetch stories from API to get newly posted stories since session started
