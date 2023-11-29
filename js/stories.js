@@ -78,7 +78,7 @@ function putFavoriteStoriesOnPage() {
 /** This function gets the data from the form, calls the .addStory method, and
  *  then put that new story on the page. */
 
-async function addStoryFromForm(event) {
+async function addStory(event) {
     event.preventDefault();
 
     const author = $("#create-author").val();
@@ -91,10 +91,13 @@ async function addStoryFromForm(event) {
     // Add story to current user's ownStories property
     currentUser.ownStories.push(newStory);
 
-    putStoriesOnPage();
+    $submitForm.hide();
+
+    // go back to main page view
+    navAllStories();
 }
 
-$submitForm.on("submit", addStoryFromForm);
+$submitForm.on("submit", addStory);
 
 /* This function adds 'star' icons to the stories list so that user can favorite/unfavorite stories */
 function addFavoriteIcons(storyList) {
