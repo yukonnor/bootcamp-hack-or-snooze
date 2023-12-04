@@ -1,6 +1,11 @@
 "use strict";
 
-// global to hold the User instance of the currently-logged-in user
+/******************************************************************************
+ * This file handles activity related to the user
+ */
+
+// global to hold the User instance of the currently-logged-in user.
+// when page initially loads this will be 'undefined'
 let currentUser;
 
 /******************************************************************************

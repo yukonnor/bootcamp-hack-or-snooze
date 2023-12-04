@@ -1,7 +1,7 @@
 "use strict";
 
 /******************************************************************************
- * Handling navbar clicks and updating navbar
+ * This file handles navbar clicks and updating navbar based on user state.
  */
 
 /** Show main list of all stories when click site name */

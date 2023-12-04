@@ -41,6 +41,7 @@ function generateStoryMarkup(story) {
 function putStoriesOnPage() {
     console.debug("putStoriesOnPage");
 
+    // clear out the stories container so that a fresh set of stories can be added.
     $allStoriesList.empty();
 
     // loop through all of our stories and generate HTML for them
@@ -49,6 +50,7 @@ function putStoriesOnPage() {
         $allStoriesList.append($story);
     }
 
+    // to vary styling for logged in vs out users, set a 'logged-out' class on the story list
     if (currentUser) {
         $allStoriesList.removeClass("logged-out");
         // addFavoriteIcons($allStoriesList);
@@ -75,7 +77,7 @@ function putFavoriteStoriesOnPage() {
     addFavoriteIcons($favoritStoriesList);
 }
 
-/** This function gets the data from the form, calls the .addStory method, and
+/** This function gets the data from the submit form, calls the .addStory method, and
  *  then put that new story on the page. */
 
 async function addStory(event) {
@@ -91,20 +93,19 @@ async function addStory(event) {
     // Add story to current user's ownStories property
     currentUser.ownStories.push(newStory);
 
-    $submitForm.hide();
-
     // go back to main page view
+    $submitForm.hide();
     navAllStories();
 }
 
 $submitForm.on("submit", addStory);
 
-/* This function adds 'star' icons to the stories list so that user can favorite/unfavorite stories */
+/* Add 'star' icons to a list of stories so that user can favorite/unfavorite stories */
+
 function addFavoriteIcons(storyList) {
     console.debug("addFavoriteIcons");
 
     // loop through all of our stories and generate 'star' icons for the favorites
-
     for (let story of storyList.children()) {
         const $story = $(story);
 
@@ -148,22 +149,20 @@ function storyIsFavorite(storyID) {
 
 async function toggleFavorite() {
     console.debug("toggleFavorite");
+
     // get story id associated with the icon
     const storyId = $(this).parent().parent().attr("id");
 
-    // console.debug($(this));
-    // console.debug($(this).parent().parent().attr("id"));
-
+    // if story is one of user's favorites:
     if (storyIsFavorite(storyId)) {
-        // if story is one of user's favorites:
-        // remove favorite via API
+        // remove favorite via API and client
         await currentUser.removeFavorite(storyId);
 
         // empty star icon
         $(this).addClass("far").removeClass("fas");
     } else {
         // else if story isn't one of user's favorites,
-        // add favorite via API
+        // add favorite via API and client
         await currentUser.addFavorite(storyId, storyList);
 
         // fill star icon
@@ -193,7 +192,7 @@ function addTrashIcons() {
     }
 }
 
-/** This function runs when a 'trash' icon is clicked to call the deleteStory method*/
+/** This function runs when a 'trash' icon is clicked. It calls the deleteStory method*/
 
 async function deleteStory() {
     // get story id associated with the icon
@@ -213,7 +212,7 @@ async function deleteStory() {
     putUserStoriesOnPage();
 }
 
-/** This function adds 'penci' icons to the stories list on the 'my stories' view so that user can edit their stories */
+/** This function adds 'pencil' icons to the stories list on the 'my stories' view so that user can edit their stories */
 
 function addPencilIcons() {
     console.debug("addPencilIcons");
