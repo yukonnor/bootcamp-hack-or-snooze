@@ -1,10 +1,5 @@
 "use strict";
 
-/** TODO:
- *  After submitting form show success message and clear form / go to main page.
- *
- */
-
 // So we don't have to keep re-finding things on page, find DOM elements once:
 
 const $body = $("body");
@@ -26,8 +21,7 @@ const $navSubmit = $("#nav-submit-story");
 const $navFavorites = $("#nav-favorites");
 const $navMyStories = $("#nav-my-stories");
 
-/** To make it easier for individual components to show just themselves, this
- * is a useful function that hides pretty much everything on the page. After
+/** Helper function to hide all content sections on the page. After
  * calling this, individual components can re-show just what they want.
  */
 
@@ -44,7 +38,7 @@ function hidePageComponents() {
     components.forEach((c) => c.hide());
 }
 
-/** Overall function to kick off the app. */
+/** Start function to kick off the app on page load. */
 
 async function start() {
     console.debug("start");
@@ -57,7 +51,7 @@ async function start() {
     if (currentUser) updateUIOnUserLogin();
 }
 
-// Once the DOM is entirely loaded, begin the app
+// Once the DOM is entirely loaded, begin the app:
 
 console.warn(
     "HEY STUDENT: This program sends many debug messages to" +
